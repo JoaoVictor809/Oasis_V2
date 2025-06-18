@@ -86,10 +86,12 @@ const UserDashboard = () => {
         </View>
 
         {/* Botões */}
-        <TouchableOpacity style={styles.button}>
-          <Ionicons name="person-circle-outline" size={24} color="#FFF" />
-          <Text style={styles.buttonText}>Editar Perfil</Text>
-        </TouchableOpacity>
+        <Link href="./EditProfileScreen" asChild>
+          <TouchableOpacity style={styles.button}>
+            <Ionicons name="person-circle-outline" size={24} color="#FFF" />
+            <Text style={styles.buttonText}>Editar Perfil</Text>
+          </TouchableOpacity>
+        </Link>
         <TouchableOpacity style={styles.button}>
           <Ionicons name="document-text-outline" size={24} color="#FFF" />
           <Text style={styles.buttonText}>Ver Relatórios</Text>

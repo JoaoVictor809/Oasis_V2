@@ -3,6 +3,7 @@ import { View, Text, Image, Pressable, SafeAreaView, ImageBackground, TextInput,
 import Estilo from '../../assets/style/login';
 import { useRouter } from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { loginUser } from '../../services/hooks/useLogin';
 import axios from 'axios';
 
@@ -25,7 +26,7 @@ export default function LoginScreen() {
         return;
       }
 
-      await AsyncStorage.setItem('userToken', data.token);
+      await SecureStore.setItemAsync('userToken', data.token);
 
       console.log('Login realizado com sucesso!');
       router.push('./'); 

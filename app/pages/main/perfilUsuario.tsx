@@ -7,10 +7,12 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Link } from "expo-router";
+import { useLogout } from "../../../services/hooks/useLogout";
 
 SplashScreen.preventAutoHideAsync();
 
 const UserDashboard = () => {
+  const handleLogout = useLogout();
   const [fontsLoaded] = useFonts({
     "Poppins_Regular": require("../../../assets/fonts/poppins/Poppins-Regular.ttf"),
     "Poppins_Bold": require("../../../assets/fonts/poppins/Poppins-Bold.ttf"),
@@ -93,6 +95,10 @@ const UserDashboard = () => {
         <TouchableOpacity style={styles.button}>
           <Ionicons name="document-text-outline" size={24} color="#FFF" />
           <Text style={styles.buttonText}>Ver Relatórios</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleLogout}>
+          <Ionicons name="log-out-outline" size={24} color="#FFF" />
+          <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
       </ScrollView>
     </GestureHandlerRootView>

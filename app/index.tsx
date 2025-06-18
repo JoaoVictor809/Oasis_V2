@@ -1,35 +1,41 @@
-import { Text, View, SafeAreaView, ImageBackground,Image, Pressable } from "react-native";
-import { Link } from "expo-router";
-import Estilo from '../assets/style/indexSplash'
+import React, { useEffect, useState } from 'react';
+import { View, Text } from "react-native";
+import * as SecureStore from 'expo-secure-store';
+import { useRouter } from 'expo-router';
 
 export default function Index() {
-  return (
-    <SafeAreaView style={Estilo.fundo}>
-      <View style={Estilo.container}>
-        <ImageBackground 
-          source={require('../assets/images/forma001.png')} 
-          style={Estilo.forma001} 
-          resizeMode="contain" 
-        />
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = await SecureStore.getItemAsync('userToken');
+        if (token) {
+          router.replace('/pages/main');
+        } else {
+          router.replace('/pages/main/login');
+        }
+      } catch (e) {
+        console.error("Failed to load token", e);
+        // Fallback to login on error, ensuring the user isn't stuck.
+        router.replace('/pages/main/login');
+      } finally {
+        // Optional: Set a timeout to ensure loading screen is visible
+        // setTimeout(() => setIsLoading(false), 500);
+        setIsLoading(false);
+      }
+    })();
+  }, [router]); // Added router to dependency array as it's used in useEffect
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Carregando...</Text>
       </View>
-      <View style={Estilo.title}>
-        <Image source={require('../assets/images/titulo.png')}/>
-      </View>
-      <View style={Estilo.container002}>
-        <ImageBackground 
-          source={require('../assets/images/forma002.png')} 
-          style={Estilo.forma002} 
-          resizeMode="contain" 
-        />
-      </View>
-      <View style={Estilo.botao}>
-        <Pressable>
-        <Link href={'./pages/splashInfo001'}>
-        <Image source={require('../assets/images/botao001.png')}/>
-        </Link>
-        </Pressable>
-      </View>
-      
-    </SafeAreaView>
-  );
+    );
+  }
+
+  // When not loading, render nothing as redirection has already occurred.
+  return null;
 }

@@ -1,9 +1,9 @@
 import { View, Platform, StyleSheet, Animated } from 'react-native';
-import React, { useRef, useEffect } from 'react'; // Added useRef, useEffect
+import React, { useState, useRef, useEffect } from 'react';
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
 import { Text, PlatformPressable } from '@react-navigation/elements';
-import { useScroll } from '../contexts/ScrollContext'; // Import useScroll
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useScroll } from '../contexts/ScrollContext';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -13,6 +13,36 @@ import { router } from 'expo-router';
 export default function TabBar({ state, descriptors, navigation }) {
     const { isTabBarVisible } = useScroll();
     const translateYValue = useRef(new Animated.Value(0)).current;
+    const [userToken, setUserToken] = useState(null);
+
+    useEffect(() => {
+        const fetchToken = async () => {
+            try {
+                const token = await AsyncStorage.getItem('userToken');
+                setUserToken(token);
+            } catch (error) {
+                console.error('Failed to load token from AsyncStorage', error);
+            }
+        };
+        fetchToken();
+    }, []);
+
+    // Reload token when screen is focused
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            const fetchToken = async () => {
+                try {
+                    const token = await AsyncStorage.getItem('userToken');
+                    setUserToken(token);
+                } catch (error) {
+                    console.error('Failed to load token from AsyncStorage', error);
+                }
+            };
+            fetchToken();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
 
     useEffect(() => {
         Animated.timing(translateYValue, {
@@ -25,7 +55,6 @@ export default function TabBar({ state, descriptors, navigation }) {
     const greyColor = '#737373';
     const activeColor = '#1261D7';
 
-    // Definindo os ícones
     const icons = {
         index: (props) => <MaterialIcons name="home-filled" size={24} color={greyColor} {...props} />,
         cursos: (props) => <MaterialCommunityIcons name="bookshelf" size={24} color={greyColor} {...props} />,
@@ -59,7 +88,15 @@ export default function TabBar({ state, descriptors, navigation }) {
                     });
 
                     if (!isFocused && !event.defaultPrevented) {
-                        navigation.navigate(route.name, route.params);
+                        if (route.name === 'login') {
+                            if (userToken) {
+                                navigation.navigate('EditProfileScreen');
+                            } else {
+                                navigation.navigate('app/pages/main/login');
+                            }
+                        } else {
+                            navigation.navigate(route.name, route.params);
+                        }
                     }
                 };
 
@@ -70,7 +107,6 @@ export default function TabBar({ state, descriptors, navigation }) {
                     });
                 };
 
-                // Garantir que o ícone exista e seja uma função
                 const Icon = icons[route.name];
                 if (!Icon) {
                     console.warn(`Ícone não encontrado para a rota: ${route.name}`);
@@ -87,7 +123,6 @@ export default function TabBar({ state, descriptors, navigation }) {
                         onLongPress={onLongPress}
                         style={styles.tabbarItem}
                     >
-                        {/*Renderizando o ícone*/}
                         <Icon
                             color={isFocused ? activeColor : greyColor}
                         />
@@ -114,13 +149,12 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         paddingVertical: 15,
         borderRadius: 20,
-        shadowColor: '#000', 
-        shadowOffset: { width: 0, height: 10 }, 
-        shadowOpacity: 0.25, 
-        shadowRadius: 5, 
-        elevation: 5, 
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.25,
+        shadowRadius: 5,
+        elevation: 5,
     },
-
     tabbarItem: {
         flex: 1,
         justifyContent: 'center',

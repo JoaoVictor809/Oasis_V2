@@ -1,8 +1,5 @@
 import { View, Text, TextInput, Pressable, Image, ScrollView, Dimensions, ImageBackground, StyleSheet } from "react-native"
-import React from "react"
-import { useFonts } from "expo-font";
-import { useState, useEffect } from 'react';
-import * as SplashScreen from 'expo-splash-screen';
+import React, { useState } from "react";
 import Estilo from '../../../assets/style/curso'
 import Slider from "@/components/Slider";
 import { ImageSlider } from '@/data/SliderData'

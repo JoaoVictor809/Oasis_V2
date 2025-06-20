@@ -1,25 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView} from 'react-native'
 import React from 'react'
-import { useFonts } from "expo-font";
-import { useState, useEffect } from 'react';
-import * as SplashScreen from 'expo-splash-screen';
-import { ScreenContainer } from 'react-native-screens';
 
 export default function enemList(){
-    const [fontsLoaded] = useFonts({
-            'Poppins_Regular': require('../assets/fonts/poppins/Poppins-Regular.ttf'),
-            'Poppins_Bold': require('../assets/fonts/poppins/Poppins-Bold.ttf')
-        });
-    
-        useEffect(() => {
-            if (fontsLoaded) {
-                SplashScreen.hideAsync();
-            }
-        }, [fontsLoaded]);
-    
-        if (!fontsLoaded) {
-            return null;
-        }
     return(
         <View>
             <Text style={styles.title}>Enem</Text>

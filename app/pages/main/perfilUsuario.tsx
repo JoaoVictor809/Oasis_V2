@@ -1,30 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator, Pressable } from "react-native";
+import React from "react"; // Removed useEffect, useState
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Pressable } from "react-native"; // Removed ActivityIndicator
 import { BarChart } from "react-native-chart-kit";
 import { ProgressBar } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
-import * as SplashScreen from "expo-splash-screen";
-import { useFonts } from "expo-font";
+// Removed: import * as SplashScreen from "expo-splash-screen";
+// Removed: import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Link } from "expo-router";
 
-SplashScreen.preventAutoHideAsync();
+// Removed: SplashScreen.preventAutoHideAsync();
 
 const UserDashboard = () => {
-  const [fontsLoaded] = useFonts({
-    "Poppins_Regular": require("../../../assets/fonts/poppins/Poppins-Regular.ttf"),
-    "Poppins_Bold": require("../../../assets/fonts/poppins/Poppins-Bold.ttf"),
-  });
-
-  useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="#1261D7" style={styles.loading} />;
-  }
+  // Removed: const [fontsLoaded] = useFonts({ ... });
+  // Removed: useEffect for SplashScreen.hideAsync()
+  // Removed: if (!fontsLoaded) { ... }
 
   const screenWidth = Dimensions.get("window").width;
   const data = {
@@ -103,7 +92,7 @@ const UserDashboard = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F8F8F8" },
-  loading: { flex: 1, justifyContent: "center", alignItems: "center" },
+  // Removed: loading style as ActivityIndicator is removed
   scrollContent: { paddingBottom: 20 },
   header: {
     flexDirection: "row", alignItems: "center", padding: 15, backgroundColor: "#1261D7", borderBottomLeftRadius: 20,borderBottomRightRadius: 20},

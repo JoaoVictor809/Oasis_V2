@@ -1,31 +1,19 @@
-import { View, Text, TextInput, Pressable, Image, ScrollView, Dimensions,  } from "react-native";
-import React from "react";
+import { View, Text, TextInput, Pressable, Image, ScrollView, Dimensions } from "react-native";
+import React, { useState } from "react"; // useEffect removed
+// useFonts, SplashScreen imports removed
 import Estilo from '../../../assets/style/provas';
-import { useFonts } from "expo-font";
-import { useState, useEffect } from 'react';
-import * as SplashScreen from 'expo-splash-screen';
 import EnemLista from '../../../components/enemList';
-import UnicampLista from '../../../components/unicampList' 
-import BdbLista from '../../../components/bdbList'
-import Icon from 'react-native-vector-icons/FontAwesome6'; 
+import UnicampLista from '../../../components/unicampList';
+import BdbLista from '../../../components/bdbList';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 const { height } = Dimensions.get('window');
+
 export default function prova() {
     const [text, onChangeText] = React.useState('');
-    const [fontsLoaded] = useFonts({
-        'Poppins_Regular': require('../../../assets/fonts/poppins/Poppins-Regular.ttf'),
-        'Poppins_Bold': require('../../../assets/fonts/poppins/Poppins-Bold.ttf')
-    });
-
-    useEffect(() => {
-        if (fontsLoaded) {
-            SplashScreen.hideAsync();
-        }
-    }, [fontsLoaded]);
-
-    if (!fontsLoaded) {
-        return null;
-    }
+    // useFonts call removed
+    // useEffect for SplashScreen removed
+    // if (!fontsLoaded) removed
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -48,25 +36,15 @@ export default function prova() {
                         </View>
                     </View>
                 </View>
-
                 <View style={[Estilo.containerMain, {height}]}>
                    <View style={Estilo.containerEenm}>
-                    <ScrollView>
-                        <EnemLista />
-                    </ScrollView>
-
+                    <ScrollView><EnemLista /></ScrollView>
                    </View>
-
                    <View>
-                    <ScrollView>
-                        <UnicampLista />
-                    </ScrollView>
+                    <ScrollView><UnicampLista /></ScrollView>
                    </View>
-
                    <View>
-                    <ScrollView>
-                        <BdbLista />
-                    </ScrollView>
+                    <ScrollView><BdbLista /></ScrollView>
                    </View>
                 </View>
             </View>

@@ -27,8 +27,8 @@ export default function LoginScreen() {
 
       await AsyncStorage.setItem('userToken', data.token);
 
-      console.log('Login realizado com sucesso!');
-      router.push('./'); 
+      console.log('Login realizado com sucesso! Navegando para EditProfileScreen.');
+      router.replace('/pages/main/EditProfileScreen'); // MODIFIED LINE
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;

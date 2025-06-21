@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, SafeAreaView, Pressable, ActivityIndicator, Alert, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router'; // Link removed as it's not used
+import { useFocusEffect, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -10,76 +10,94 @@ const API_BASE_URL = 'http://localhost:3000';
 const EditProfileScreen = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  // Password state removed
   const router = useRouter();
 
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
-  // isAuthenticated state is still useful to manage showing loader vs content,
-  // or potentially redirecting if auth fails mid-session.
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // Assume authenticated initially, useEffect will verify
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentName, setCurrentName] = useState('');
   const [currentEmail, setCurrentEmail] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
-  useEffect(() => {
-    const loadData = async () => {
-      setIsLoadingAuth(true);
-      let token = null;
-      try {
-        token = await AsyncStorage.getItem('userToken');
-        if (token) {
-          // setIsAuthenticated(true); // Already assumed true, or set after successful fetch
-          try {
+  useFocusEffect(
+    useCallback(() => {
+      const loadData = async () => {
+        console.log("EditProfileScreen: loadData started.");
+        setIsLoadingAuth(true);
+        let token = null;
+        try {
+          token = await AsyncStorage.getItem('userToken');
+          console.log("EditProfileScreen: Token from AsyncStorage -", token ? "Exists" : "Not Found");
+
+          if (token) {
+            setIsAuthenticated(true); // Optimistic: assume token is valid for now.
+            console.log("EditProfileScreen: Token found. Attempting to fetch profile data.");
+            // API_BASE_URL is accessible from component scope
             const response = await axios.get(`${API_BASE_URL}/api/user/profile`, {
               headers: { Authorization: `Bearer ${token}` },
             });
+
             if (response.data) {
+              console.log("EditProfileScreen: Profile data fetched successfully.");
               const userData = response.data.user || response.data;
               setName(userData.name || userData.username || '');
               setCurrentName(userData.name || userData.username || '');
               setEmail(userData.email || '');
               setCurrentEmail(userData.email || '');
-              setIsAuthenticated(true); // Confirm authentication
+              // setIsAuthenticated(true); // Already set optimistically
             } else {
-              console.warn('No data received in API response for user profile. Response:', response);
-              Alert.alert("Erro", "Não foi possível carregar os dados do perfil.");
-              setIsAuthenticated(false); // Failed to get data, consider unauthenticated
-              router.replace('/pages/main/login');
+              console.warn("EditProfileScreen: Profile data not found in API response (response.data is falsy), but token was initially valid. Clearing fields.");
+              setName(''); setCurrentName(''); setEmail(''); setCurrentEmail('');
+              // Keep isAuthenticated = true as token was present. User will see empty fields.
+              // Consider if this state (valid token, no profile data) should lead to different UI or error message.
             }
-          } catch (apiError) {
-            console.error("Error fetching user profile:", apiError);
-            if (axios.isAxiosError(apiError) && apiError.response?.status === 401) {
-              Alert.alert("Sessão expirada", "Por favor, faça login novamente.");
-              try { await AsyncStorage.removeItem('userToken'); } catch (e) { console.error("Failed to remove token after 401", e); }
-            } else {
-              Alert.alert("Erro de Rede", "Não foi possível conectar ao servidor.");
-            }
-            setIsAuthenticated(false); // Set to false on any API error
+          } else {
+            console.log("EditProfileScreen: No token found. Setting unauthenticated and redirecting to login.");
+            setIsAuthenticated(false);
+            setName(''); setCurrentName(''); setEmail(''); setCurrentEmail('');
+            router.replace('/pages/main/login');
+            setIsLoadingAuth(false); // Ensure loading is stopped before returning
+            return;
+          }
+        } catch (error) {
+          console.error("EditProfileScreen: Error during API call to /api/user/profile or AsyncStorage:", error);
+          // If error is from AsyncStorage.getItem itself, token would be null, handled above.
+          // This catch is primarily for axios errors now if token was present.
+          if (axios.isAxiosError(error) && error.response?.status === 401) {
+            console.log("EditProfileScreen: API call returned 401. Invalid/expired token. Logging out and redirecting.");
+            Alert.alert("Sessão expirada", "Por favor, faça login novamente.");
+            try { await AsyncStorage.removeItem('userToken'); } catch (e) { console.error("Failed to remove token after 401", e); }
+          } else {
+            console.log("EditProfileScreen: API call failed (non-401) or other error. Keeping user authenticated status as true (since token was present), showing error alert.");
+            Alert.alert("Erro", "Não foi possível carregar seus dados. Verifique sua conexão ou tente mais tarde.");
+          }
+          // For any error after a token was initially assumed valid, clear fields and redirect.
+          // If it was a 401, user is logged out. If other API error, they are still "logged in" but data failed to load.
+          // The decision to redirect here depends on desired UX for non-401 API errors.
+          // Forcing redirect on ANY error after token presence might be too aggressive.
+          // Let's refine: only redirect on 401 or if token was never there.
+          // For other API errors, they stay on screen but see an error + cleared fields.
+          setName(''); setCurrentName(''); setEmail(''); setCurrentEmail('');
+          if (axios.isAxiosError(error) && error.response?.status === 401) {
+            setIsAuthenticated(false); // Only set to false for 401, otherwise keep optimistic true
+            router.replace('/pages/main/login');
+          } else if (!token) { // Should have been caught by the if(!token) block earlier, but as a safeguard
+            setIsAuthenticated(false);
             router.replace('/pages/main/login');
           }
-        } else {
-          // No token found, definitely not authenticated
-          setIsAuthenticated(false);
-          setName(''); // Clear fields
-          setCurrentName('');
-          setEmail('');
-          setCurrentEmail('');
-          router.replace('/pages/main/login');
+          // If it's another API error (not 401) and token was present, user remains authenticated but with no data.
+        } finally {
+          setIsLoadingAuth(false);
+          console.log("EditProfileScreen: loadData finished.");
         }
-      } catch (error) {
-        console.error("Error during initial data load or token retrieval:", error);
-        setIsAuthenticated(false);
-        setName('');
-        setCurrentName('');
-        setEmail('');
-        setCurrentEmail('');
-        router.replace('/pages/main/login');
-      } finally {
-        setIsLoadingAuth(false);
-      }
-    };
-    loadData();
-  }, []);
+      };
+
+      loadData();
+
+      return () => {
+        // Optional: Cleanup logic when the screen loses focus
+      };
+    }, [])
+  );
 
   const handleSave = async () => {
     const trimmedName = name.trim();
@@ -155,13 +173,22 @@ const EditProfileScreen = () => {
           text: "Sair",
           style: "destructive",
           onPress: async () => {
+            console.log("LOGOUT_DEBUG: Logout confirmed by user. Starting logout process...");
             try {
+              console.log("LOGOUT_DEBUG: Attempting to remove userToken from AsyncStorage...");
               await AsyncStorage.removeItem('userToken');
+              console.log("LOGOUT_DEBUG: AsyncStorage.removeItem('userToken') call completed.");
             } catch (error) {
-              console.error("Failed to remove token during logout:", error);
+              console.error("LOGOUT_DEBUG: Error removing userToken from AsyncStorage:", error);
             }
+
+            console.log("LOGOUT_DEBUG: Setting isAuthenticated state to false...");
             setIsAuthenticated(false);
+            console.log("LOGOUT_DEBUG: isAuthenticated state update initiated.");
+
+            console.log("LOGOUT_DEBUG: Attempting to navigate to /pages/main/login using router.replace()...");
             router.replace('/pages/main/login');
+            console.log("LOGOUT_DEBUG: router.replace('/pages/main/login') call initiated."); // This log might not always show if navigation is immediate.
           },
         },
       ]
@@ -169,7 +196,6 @@ const EditProfileScreen = () => {
   };
 
   const isSaveDisabledLogic = () => {
-    // Simplified for editing only
     return (name.trim() === currentName && email.trim() === currentEmail) || name.trim() === '' || isSaving;
   };
 
@@ -182,9 +208,6 @@ const EditProfileScreen = () => {
     );
   }
 
-  // If, after loading, not authenticated, this screen shouldn't render its form.
-  // The useEffect should have redirected to login.
-  // This is a fallback or can be a brief "redirecting..." message if desired.
   if (!isAuthenticated) {
     return (
       <SafeAreaView style={styles.centeredLoader}>
@@ -193,7 +216,6 @@ const EditProfileScreen = () => {
     );
   }
 
-  // Authenticated view
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
@@ -212,8 +234,6 @@ const EditProfileScreen = () => {
 
         <Text style={styles.label}>Email:</Text>
         <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="Digite seu email" keyboardType="email-address" autoCapitalize="none" editable={!isSaving} />
-
-        {/* Password input removed */}
 
         <View style={styles.buttonContainer}>
           <Button
@@ -295,8 +315,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
   },
-  // Removed loginPromptContainer, loginPromptText, loginPromptLink as they were for registration
-  centeredContent: { // This style was for the unauthenticated message block, which is now just a loader/redirect message
+  centeredContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

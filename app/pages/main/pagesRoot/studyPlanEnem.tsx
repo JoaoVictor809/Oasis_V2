@@ -1,7 +1,9 @@
+// app/pages/content/ENEMCourseScreen.tsx (ou onde estiver sua lista de módulos)
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as Font from "expo-font";
+import { useRouter } from "expo-router";
 
 const loadFonts = () => {
   return Font.loadAsync({
@@ -58,39 +60,52 @@ const modulos = [
   },
 ];
 
-const ModuloList = ({ title, data }) => (
-  <View style={styles.moduleContainer}>
-    <Text style={styles.title}>{title}</Text>
-    <FlatList
-      data={data}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => {
-        const isTestButton = item.title.includes("Teste o seu conhecimento");
+const ModuloList = ({ title, data }) => {
+  const router = useRouter();
 
-        return (
-          <View style={styles.card}>
-            <TouchableOpacity
-              style={[styles.button, isTestButton && styles.testButton]}
-            >
-              <Text
-                style={[
-                  styles.buttonText,
-                  isTestButton && styles.testButtonText,
-                ]}
+  return (
+    <View style={styles.moduleContainer}>
+      <Text style={styles.title}>{title}</Text>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          const isTestButton = item.title.includes("Teste o seu conhecimento");
+
+          const handlePress = () => {
+            if (item.id === "1") {
+              router.push("/pages/content/LessonScreenIntroEnem"); 
+            } else {
+              console.log("Conteúdo ainda não disponível.");
+            }
+          };
+
+          return (
+            <View style={styles.card}>
+              <TouchableOpacity
+                onPress={handlePress}
+                style={[styles.button, isTestButton && styles.testButton]}
               >
-                {item.title}
-              </Text>
-              {!isTestButton && (
-                <Icon name="chevron-right" size={18} color="#FFF" style={styles.icon} />
-              )}
-            </TouchableOpacity>
-          </View>
-        );
-      }}
-      scrollEnabled={false}
-    />
-  </View>
-);
+                <Text
+                  style={[
+                    styles.buttonText,
+                    isTestButton && styles.testButtonText,
+                  ]}
+                >
+                  {item.title}
+                </Text>
+                {!isTestButton && (
+                  <Icon name="chevron-right" size={18} color="#FFF" style={styles.icon} />
+                )}
+              </TouchableOpacity>
+            </View>
+          );
+        }}
+        scrollEnabled={false}
+      />
+    </View>
+  );
+};
 
 export default function ENEMCourseScreen() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -121,14 +136,12 @@ export default function ENEMCourseScreen() {
 const styles = StyleSheet.create({
   scrollContainer: { flex: 1, backgroundColor: "#f5f5f5" },
   container: { padding: 20 },
-
   loadingText: {
     fontSize: 18,
     textAlign: "center",
     marginTop: 50,
     fontFamily: "Poppins-Regular",
   },
-
   moduleContainer: {
     backgroundColor: "white",
     padding: 25,
@@ -141,7 +154,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-
   title: {
     fontSize: 22,
     fontWeight: "bold",
@@ -149,9 +161,7 @@ const styles = StyleSheet.create({
     color: "#1261D7",
     fontFamily: "Poppins-Bold",
   },
-
   card: { backgroundColor: "white", borderRadius: 10, marginVertical: 5 },
-
   button: {
     flexDirection: "row",
     alignItems: "center",
@@ -162,22 +172,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#1261D7",
     marginTop: 20,
   },
-
   buttonText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
     fontFamily: "Poppins-Bold",
   },
-
   icon: { marginLeft: 10, color: "#FFF" },
-
   testButton: {
     backgroundColor: "#FFF",
     borderWidth: 2,
     borderColor: "#1261D7",
   },
-
   testButtonText: {
     color: "#1261D7",
   },

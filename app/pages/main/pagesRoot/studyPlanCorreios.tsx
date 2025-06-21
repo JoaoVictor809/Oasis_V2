@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as Font from "expo-font";
+import { useRouter } from "expo-router"; // IMPORTANTE
 
 const loadFonts = () => {
   return Font.loadAsync({
@@ -58,42 +59,54 @@ const modulos = [
   },
 ];
 
+const ModuloList = ({ title, data }) => {
+  const router = useRouter();
 
-const ModuloList = ({ title, data }) => (
-  <View style={styles.moduleContainer}>
-    <Text style={styles.title}>{title}</Text>
-    <FlatList
-      data={data}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => {
-        const isTestButton = item.title.includes("Teste o seu conhecimento");
+  return (
+    <View style={styles.moduleContainer}>
+      <Text style={styles.title}>{title}</Text>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          const isTestButton = item.title.includes("Teste o seu conhecimento");
 
-        return (
-          <View style={styles.card}>
-            <TouchableOpacity
-              style={[styles.button, isTestButton && styles.testButton]}
-            >
-              <Text
-                style={[
-                  styles.buttonText,
-                  isTestButton && styles.testButtonText,
-                ]}
+          const handlePress = () => {
+            if (item.id === "1") {
+              router.push("/pages/content/LessonScreenIntroCorreios"); 
+            } else {
+              console.log("Outro conteúdo ou funcionalidade ainda não implementada.");
+            }
+          };
+
+          return (
+            <View style={styles.card}>
+              <TouchableOpacity
+                onPress={handlePress}
+                style={[styles.button, isTestButton && styles.testButton]}
               >
-                {item.title}
-              </Text>
-              {!isTestButton && (
-                <Icon name="chevron-right" size={18} color="#FFF" style={styles.icon} />
-              )}
-            </TouchableOpacity>
-          </View>
-        );
-      }}
-      scrollEnabled={false}
-    />
-  </View>
-);
+                <Text
+                  style={[
+                    styles.buttonText,
+                    isTestButton && styles.testButtonText,
+                  ]}
+                >
+                  {item.title}
+                </Text>
+                {!isTestButton && (
+                  <Icon name="chevron-right" size={18} color="#FFF" style={styles.icon} />
+                )}
+              </TouchableOpacity>
+            </View>
+          );
+        }}
+        scrollEnabled={false}
+      />
+    </View>
+  );
+};
 
-export default function ENEMCourseScreen() {
+export default function CorreiosCourseScreen() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {

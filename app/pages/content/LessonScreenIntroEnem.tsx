@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import {
   View,
   Text,
@@ -38,9 +38,11 @@ interface LessonPart {
 import { useFonts } from 'expo-font'; 
 import { useEffect } from 'react';
 
+
+
 // Component
 const LessonScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const router = useRouter();
   const [fontsLoaded] = useFonts({
     Poppins_Regular: require("@/assets/fonts/poppins/Poppins-Regular.ttf"),
     Poppins_Bold: require("@/assets/fonts/poppins/Poppins-Bold.ttf"),
@@ -144,18 +146,18 @@ const LessonScreen: React.FC = () => {
 
           <Text style={styles.completionTitle}>Missão Cumprida!</Text>
           <Text style={styles.completionText}>Você ganhou +{xpGained} XP!</Text>
-          <TouchableOpacity
-            onPress={() => {
-              setLessonCompleted(false);
-              setCurrentStepIndex(0);
-              setXpGained(0);
-              navigation.navigate('Progress');
-            }}
-            style={[styles.button, styles.primaryButton, styles.continueButton]}
-          >
-            <Text style={styles.buttonText}>Continuar Aprendendo</Text>
+        <TouchableOpacity
+  onPress={() => {
+    setLessonCompleted(false);
+    setCurrentStepIndex(0);
+    setXpGained(0);
+    router.push('/pages/main/progress');
+  }}
+  style={[styles.button, styles.primaryButton, styles.continueButton]}
+>
+  <Text style={styles.buttonText}>Continuar Aprendendo</Text>
+</TouchableOpacity>
 
-          </TouchableOpacity>
         </SafeAreaView>
       </GestureHandlerRootView>
     );
@@ -168,9 +170,10 @@ const LessonScreen: React.FC = () => {
     <GestureHandlerRootView style={styles.gestureHandlerRoot}>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerBar}>
-          <Pressable onPress={() => navigation.navigate('planoDeEstudos')} style={styles.backButton}>
-            <Image style={styles.backIcon} source={require('@/assets/images/Back.png')} />
-          </Pressable>
+         <Pressable onPress={() => router.push('/pages/main/pagesRoot/studyPlanEnem')} style={styles.backButton}>
+  <Image style={styles.backIcon} source={require('@/assets/images/Back.png')} />
+</Pressable>
+
           <Text style={styles.headerTitle}>{LESSON_TITLE}</Text>
           <View style={{ width: 24 }} />
         </View>
@@ -334,14 +337,12 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
   } as TextStyle,
   videoContainer: {
-    flex:1,
     marginBottom: 20,
     borderRadius: 10,
     overflow: 'hidden', // Ensures children (video) also have rounded corners
     backgroundColor: '#000',
   } as ViewStyle,
   videoPlayer: {
-    flex:1,
     width: '100%',
     aspectRatio: 9 / 16, // Common video aspect ratio
   } as ViewStyle,

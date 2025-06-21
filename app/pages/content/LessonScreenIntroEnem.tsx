@@ -149,7 +149,7 @@ const LessonScreen: React.FC = () => {
               setLessonCompleted(false);
               setCurrentStepIndex(0);
               setXpGained(0);
-              navigation.navigate('meusCursos');
+              navigation.navigate('Progress');
             }}
             style={[styles.button, styles.primaryButton, styles.continueButton]}
           >

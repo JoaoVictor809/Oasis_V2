@@ -14,28 +14,16 @@ import {
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-// Placeholder for Link component - specify actual library e.g., expo-router or react-navigation
-// import { Link } from 'expo-router'; // Example
 
-// For a real video player, you might use a library like expo-av
-// import { Video } from 'expo-av';
+const LESSON_TITLE: string = "Introduction to Algebra"; 
 
-const LESSON_TITLE: string = "Introduction to Algebra"; // Example Title
-// const TOTAL_LESSON_STEPS: number = 10; // Removed
 
 interface LessonPart {
   type: 'text' | 'video';
-  content: string; // For 'text', this is the text itself. For 'video', this is the video URI.
-  title?: string; // Optional title for this part, could be displayed
+  content: string; 
+  title?: string; 
 }
 
-// It's good practice to define types for your styles, especially in larger applications
-// For simplicity here, we'll let StyleSheet.create infer them, but you could do:
-// interface Styles {
-//   container: ViewStyle;
-//   centeredScreen: ViewStyle;
-//   // ... and so on for all styles
-// }
 
 const LessonScreen: React.FC = () => {
   const initialLessonParts: LessonPart[] = [
@@ -58,9 +46,7 @@ const LessonScreen: React.FC = () => {
       if (prevIndex < totalLessonSteps - 1) {
         return prevIndex + 1;
       }
-      // Optionally, if at the end, do nothing, or trigger lesson completion readiness
-      // For now, just don't go out of bounds.
-      // Alert.alert("Navigation", "You are at the last part.");
+     
       return prevIndex;
     });
   };
@@ -70,8 +56,7 @@ const LessonScreen: React.FC = () => {
       if (prevIndex > 0) {
         return prevIndex - 1;
       }
-      // Optionally, if at the beginning, do nothing.
-      // Alert.alert("Navigation", "You are at the first part.");
+      
       return prevIndex;
     });
   };
@@ -92,10 +77,10 @@ const LessonScreen: React.FC = () => {
           <TouchableOpacity
             onPress={(): void => {
               setLessonCompleted(false);
-              setCurrentStepIndex(0); // Reset for demo, use currentStepIndex
+              setCurrentStepIndex(0); 
               setXpGained(0);
               Alert.alert("Navigation", "Returning to lesson list (placeholder)");
-              // In a real app: navigation.navigate('LessonList');
+              
             }}
             style={styles.continueButton}
           >
@@ -113,7 +98,7 @@ const LessonScreen: React.FC = () => {
 
   return (
     <GestureHandlerRootView style={styles.gestureHandlerRoot}>
-      {/* New App Header */}
+  
       <View style={styles.appHeader}>
         <Pressable onPress={() => Alert.alert("Navigation", "Navigate to Course Page (placeholder)")}>
           {/* <Link href={'../'}> */}
@@ -123,9 +108,9 @@ const LessonScreen: React.FC = () => {
         <Text style={styles.appHeaderTitle}>Página Inicial</Text>
       </View>
 
-      {/* Original main container now takes remaining space */}
+
       <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-        {/* Lesson-Specific Header */}
+       
         <View style={styles.headerContainer}>
           <Text style={styles.lessonTitleText}>{LESSON_TITLE}</Text>
           <View style={styles.progressBarTrack}>
@@ -176,11 +161,11 @@ const styles = StyleSheet.create({
   gestureHandlerRoot: {
     flex: 1,
   } as ViewStyle,
-  container: { // Used by completion screen primarily now
+  container: { 
     flex: 1,
     backgroundColor: '#FFFFFF',
   } as ViewStyle,
-  centeredScreen: { // Used for completion screen
+  centeredScreen: { 
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -189,53 +174,52 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
-    // paddingTop handled by device/status bar, or SafeAreaView if used.
-    // Let's add some vertical padding for the elements themselves.
+  
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
     backgroundColor: '#1261D7',
-    borderBottomLeftRadius: 20, // Added
-    borderBottomRightRadius: 20, // Added
+    borderBottomLeftRadius: 20, 
+    borderBottomRightRadius: 20, 
   } as ViewStyle,
   backIcon: {
     width: 24,
     height: 24,
     marginRight: 15,
-    tintColor: '#FFFFFF', // Ensure back icon is visible on dark header
+    tintColor: '#FFFFFF', 
   },
   appHeaderTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF', // New Primary Text (on blue background)
+    color: '#FFFFFF', 
     fontFamily: 'Poppins',
   } as TextStyle,
-  headerContainer: { // Lesson-specific header
+  headerContainer: { 
     paddingTop: 15,
     paddingHorizontal: 20,
     paddingBottom: 10,
-    backgroundColor: '#FFFFFF', // Changed from #F8F9FA
-    borderBottomWidth: 1,       // Added border
-    borderBottomColor: '#E0E0E0', // Added border
+    backgroundColor: '#FFFFFF', 
+    borderBottomWidth: 1,       
+    borderBottomColor: '#E0E0E0', 
   } as ViewStyle,
   lessonTitleText: {
     fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#3A3A3A', // Keeping dark grey for contrast on white
+    color: '#3A3A3A',
     marginBottom: 10,
     fontFamily: 'Poppins',
   } as TextStyle,
   progressBarTrack: {
     height: 10,
     backgroundColor: '#E0E0E0',
-    borderRadius: 8, // Changed from 5
+    borderRadius: 8, 
     width: '100%',
   } as ViewStyle,
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#1261D7', // New Primary Blue
-    borderRadius: 8, // Changed from 5
+    backgroundColor: '#1261D7', 
+    borderRadius: 8, 
   } as ViewStyle,
   contentScrollArea: {
     flex: 1,
@@ -244,7 +228,7 @@ const styles = StyleSheet.create({
   didacticText: {
     fontSize: 16,
     lineHeight: 24,
-    color: '#4F4F4F', // Standard text color
+    color: '#4F4F4F', 
     marginTop: 10,
     marginBottom: 20,
     fontFamily: 'Poppins',
@@ -253,7 +237,7 @@ const styles = StyleSheet.create({
   partTitleText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3A3A3A', // Dark Grey
+    color: '#3A3A3A', 
     marginBottom: 8,
     marginTop: 10,
     fontFamily: 'Poppins',
@@ -264,7 +248,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-    borderRadius: 20, // Changed from 8
+    borderRadius: 20, 
   } as ViewStyle,
   videoPlaceholderText: {
     fontSize: 16,
@@ -307,7 +291,7 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   completeLessonButtonText: {
     fontSize: 18,
-    color: '#FFFFFF', // Text on blue background
+    color: '#FFFFFF', 
     fontWeight: 'bold',
     fontFamily: 'Poppins',
   } as TextStyle,
@@ -316,21 +300,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 20,
-    color: '#2C3E50', // Keeping this as is, or change to a theme color if needed
+    color: '#2C3E50', 
     fontFamily: 'Poppins',
   } as TextStyle,
-  buttonText: { // Used by "Continuar" button
-    color: '#FFFFFF', // Text on blue background
+  buttonText: { 
+    color: '#FFFFFF', 
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Poppins',
   } as TextStyle,
   continueButton: {
-    backgroundColor: '#1261D7', // New Primary Blue
+    backgroundColor: '#1261D7', 
     paddingVertical: 12,
     paddingHorizontal: 30,
-    borderRadius: 20, // Changed from 25
+    borderRadius: 20, 
     marginTop: 20,
     alignSelf: 'center',
   } as ViewStyle,

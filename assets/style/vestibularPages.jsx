@@ -23,8 +23,8 @@ export default StyleSheet.create({
         elevation: 5,
     },
     image: {
-        width: 120, 
-        height: 120,
+        width: 160, 
+        height: 140,
         resizeMode: 'contain',
         marginBottom: 15,
     },

@@ -35,7 +35,7 @@ export default function Index() {
     ];
 
     const buttonDataConcursos = [
-        { image: require("@/assets/images/logotipo-provas/correios.svg"), route: "/pages/main/provas" },
+        { image: require("@/assets/images/logotipo-provas/correios.svg"), route: "/pages/main/pagesRoot/correiosPage" },
         { image: require("@/assets/images/logotipo-provas/bancodobrasil.svg"), route: "/pages/main/provas" },
         { image: require("@/assets/images/logotipo-provas/caixaeconomica.svg"), route: "/pages/main/provas" },
         { image: require("@/assets/images/logotipo-provas/policiamilitar.svg"), route: "/pages/main/provas" },

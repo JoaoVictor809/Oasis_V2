@@ -9,13 +9,13 @@ import {
   Platform,
   ViewStyle,
   TextStyle,
-  Pressable, // Added for clarity, part of 'react-native'
-  Image,       // Added for clarity, part of 'react-native'
+  Pressable, 
+  Image,     
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
-const LESSON_TITLE: string = "Introduction to Algebra"; 
+const LESSON_TITLE: string = "Interpretação de Texto"
 
 
 interface LessonPart {
@@ -27,10 +27,35 @@ interface LessonPart {
 
 const LessonScreen: React.FC = () => {
   const initialLessonParts: LessonPart[] = [
-    { type: 'text', title: 'Part 1: Introduction', content: 'This is the first text part of the lesson. Algebra is fun! We will explore variables and equations.' },
-    { type: 'video', title: 'Part 2: Explainer Video', content: 'http://d23dyxeqlo5psn.cloudfront.net/big_buck_bunny.mp4' },
-    { type: 'text', title: 'Part 3: Summary', content: 'This is the final summary text. You learned a lot about basic algebra concepts!' },
-    { type: 'text', title: 'Part 4: Practice Problems', content: 'Solve: 2x + 5 = 15. What is x?'}
+        { type: 'video', title: 'Part 1', content: 'http://d23dyxeqlo5psn.cloudfront.net/big_buck_bunny.mp4' },
+      {
+    type: 'text',
+    title: 'Parte 2:O que é Interpretação de Textos?',
+    content: 'Interpretação de textos é a habilidade de compreender, analisar e refletir sobre o que está escrito, mesmo quando nem tudo está dito de forma direta. Em concursos públicos, essa habilidade é essencial, pois muitas perguntas exigem que você entenda a intenção do autor ou leia nas entrelinhas.'
+  },
+  {
+    type: 'text',
+    title: 'Parte 3:Dicas para Interpretar Melhor',
+    content: ` Leia com atenção: evite pular trechos ou "passar o olho".\n Fique atento às palavras de ligação (portanto, porém, além disso).\n Observe o título: ele costuma antecipar o tema central.\n Identifique o objetivo do autor: ele quer informar, convencer ou emocionar?\n Cuidado com ironias ou críticas sutis.`
+  },
+  {
+    type: 'text',
+    title: 'Parte 4: Dica Rápida',
+    content: '💡 Leia a pergunta antes do texto! Isso ajuda você a já buscar as informações certas, evitando distrações.'
+  },
+  {
+    type: 'text',
+    title: 'Parte 5: Exemplo Prático',
+    content: `Texto: João sempre foi o último a ser escolhido no time de futebol da escola. Mesmo assim, nunca reclamava. Apenas sorria e ia para o gol, onde ninguém queria jogar.\n\nPergunta: O que o texto sugere sobre João?\n\nResposta esperada: Que ele não era bom no futebol, mas aceitava sua posição com humildade, sem demonstrar tristeza ou revolta.`
+  },
+
+  {
+    type: 'text',
+    title: 'Parte 6: Resumo Final',
+    content: 'Você aprendeu o que é interpretação de textos, como identificar sentidos implícitos e estratégias para entender melhor o que o autor quer comunicar. A prática constante é essencial!'
+  }
+   
+
   ];
   // This would typically come from props or a data store in a real app
   const [lessonParts, setLessonParts] = useState<LessonPart[]>(initialLessonParts);

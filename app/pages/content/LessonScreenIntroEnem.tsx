@@ -17,27 +17,25 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Video, AVPlaybackStatus, ResizeMode } from 'expo-av';
 
-// Constants
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const PRIMARY_COLOR = '#1261D7'; // Deep Blue
+const PRIMARY_COLOR = '#1261D7'; 
 const TEXT_COLOR_PRIMARY = '#333333';
 const TEXT_COLOR_SECONDARY = '#555555';
-const BACKGROUND_COLOR = '#F4F7FC'; // Light grayish blue
+const BACKGROUND_COLOR = '#F4F7FC'; 
 const CARD_BACKGROUND_COLOR = '#FFFFFF';
-const ERROR_COLOR = '#D32F2F'; // Red for errors or important alerts
+const ERROR_COLOR = '#D32F2F'; 
 
 const LESSON_TITLE: string = "Interpretação de Texto";
 
-// Interfaces
 interface LessonPart {
   type: 'text' | 'video';
-  content: string; // For text, it's the text. For video, it's the URI.
+  content: string; 
   title?: string;
-  estimatedTime?: number; // Optional: estimated time in minutes for this part
+  estimatedTime?: number; 
 }
 
-import { useFonts } from 'expo-font'; // Assuming expo-font is used for useFonts
-import { useEffect } from 'react'; // Assuming useEffect is imported from react
+import { useFonts } from 'expo-font'; 
+import { useEffect } from 'react';
 
 // Component
 const LessonScreen: React.FC = () => {
@@ -49,12 +47,12 @@ const LessonScreen: React.FC = () => {
 
   useEffect(() => {
     if (fontsLoaded) {
-     
+
     }
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
 
   const videoRef = useRef<Video>(null);
@@ -64,40 +62,48 @@ const LessonScreen: React.FC = () => {
     {
       type: 'video',
       title: 'Vídeo Introdutório: A Arte de Interpretar',
-      content: require('@/assets/video/Generated File June 20, 2025 - 7_44PM.mp4'), // Ensure this path is correct
+      content: require('@/assets/video/Generated File June 21, 2025 - 9_50AM.mp4'), // Ensure this path is correct
       estimatedTime: 5,
     },
     {
-      type: 'text',
-      title: 'O que é Interpretação de Textos?',
-      content: 'Interpretação de textos é a habilidade de decifrar e compreender profundamente o conteúdo apresentado, identificando não apenas o que está explícito, mas também as nuances, intenções do autor e informações implícitas. Em contextos de concursos, como os dos Correios, essa competência é crucial, pois frequentemente as questões testam sua capacidade de ir além da leitura superficial.',
-      estimatedTime: 3,
-    },
-    {
-      type: 'text',
-      title: 'Estratégias-Chave para uma Interpretação Eficaz',
-      content: `1. Leitura Atenta e Múltipla: Não se contente com uma única leitura. A primeira serve para um contato inicial, as seguintes para aprofundamento.\n2. **Contextualize:** Entenda o contexto em que o texto foi escrito e o público-alvo.\n3. **Vocabulário é Poder:** Palavras desconhecidas podem ser barreiras. Tente inferir pelo contexto ou, se permitido, consulte um dicionário.\n4. **Sublinhe e Anote:** Destaque ideias centrais, palavras-chave e faça pequenas anotações marginais.\n5. **Identifique a Tese Central:** Qual a principal mensagem ou argumento que o autor defende?\n6. **Atenção aos Detalhes:** Conectivos (e.g., 'mas', 'portanto', 'embora') são pistas importantes sobre a argumentação.\n7. **Diferencie Fato de Opinião:** Nem tudo no texto é uma verdade absoluta; saiba separar o que é informação objetiva do que é ponto de vista do autor.`,
-      estimatedTime: 7,
-    },
-    {
-      type: 'text',
-      title: 'Dica de Ouro: Pergunte ao Texto',
-      content: '💡 Antes mesmo de ler as alternativas de uma questão, formule perguntas sobre o texto com base no enunciado. Exemplo: "O que o autor quis dizer com X expressão?". Isso direciona seu foco durante a releitura.',
-      estimatedTime: 2,
-    },
-    {
-      type: 'text',
-      title: 'Exemplo Prático Comentado',
-      content: `**Texto:** "A comunicação digital, apesar de conectar instantaneamente pessoas de todo o globo, muitas vezes empobrece a profundidade das interações humanas. A urgência da resposta sobrepõe-se à reflexão, e o emoji substitui a nuance da expressão."\n\n**Questão:** Qual a principal crítica do autor à comunicação digital?\n\n**Análise:** O autor critica a superficialidade ("empobrece a profundidade", "emoji substitui a nuance") e a perda de reflexão ("urgência sobrepõe-se à reflexão") nas interações digitais, apesar de reconhecer seu poder de conexão.`,
-      estimatedTime: 5,
-    },
-    {
-      type: 'text',
-      title: 'Recapitulando para Fixar',
-      content: 'Nesta aula, você explorou o conceito de interpretação textual, aprendeu técnicas valiosas para desvendar os segredos de um texto e viu um exemplo prático. Lembre-se: a interpretação é uma habilidade que se aprimora com a prática constante. Continue exercitando!',
-      estimatedTime: 3,
-    },
-  ];
+    type: 'text',
+    title: '📚 O que é Interpretação de Textos?',
+    content: 'Interpretação de textos é a habilidade de decifrar e compreender profundamente o conteúdo apresentado, identificando não apenas o que está explícito, mas também as nuances, intenções do autor e informações implícitas. \n📌 Em contextos de concursos, como os dos Correios, essa competência é crucial, pois frequentemente as questões testam sua capacidade de ir além da leitura superficial.',
+    estimatedTime: 3,
+  },
+  {
+    type: 'text',
+    title: '🛠️ Estratégias-Chave para uma Interpretação Eficaz',
+    content: `1️⃣ Leitura Atenta e Múltipla: Não se contente com uma única leitura. A primeira serve para um contato inicial, as seguintes para aprofundamento.\n
+2️⃣ Contextualize: Entenda o contexto em que o texto foi escrito e o público-alvo.\n
+3️⃣ Vocabulário é Poder: Palavras desconhecidas podem ser barreiras. Tente inferir pelo contexto ou, se permitido, consulte um dicionário.\n
+4️⃣ Sublinhe e Anote: Destaque ideias centrais, palavras-chave e faça pequenas anotações marginais.\n
+5️⃣ Identifique a Tese Central: Qual a principal mensagem ou argumento que o autor defende?\n
+6️⃣ Atenção aos Detalhes: Conectivos (e.g., 'mas', 'portanto', 'embora') são pistas importantes sobre a argumentação.\n
+7️⃣ Diferencie Fato de Opinião: Nem tudo no texto é uma verdade absoluta; saiba separar o que é informação objetiva do que é ponto de vista do autor.`,
+    estimatedTime: 7,
+  },
+  {
+    type: 'text',
+    title: '💡 Dica de Ouro: Pergunte ao Texto',
+    content: '📝 Antes mesmo de ler as alternativas de uma questão, formule perguntas sobre o texto com base no enunciado. \n\n🔎 Exemplo: "O que o autor quis dizer com X expressão?" \n\n➡️ Isso direciona seu foco durante a releitura.',
+    estimatedTime: 2,
+  },
+  {
+    type: 'text',
+    title: '🧪 Exemplo Prático Comentado',
+    content: `📄 Texto: "A comunicação digital, apesar de conectar instantaneamente pessoas de todo o globo, muitas vezes empobrece a profundidade das interações humanas. A urgência da resposta sobrepõe-se à reflexão, e o emoji substitui a nuance da expressão."\n
+❓ Questão: Qual a principal crítica do autor à comunicação digital?\n
+🧐 Análise: O autor critica a superficialidade ("empobrece a profundidade", "emoji substitui a nuance") e a perda de reflexão ("urgência sobrepõe-se à reflexão") nas interações digitais, apesar de reconhecer seu poder de conexão.`,
+    estimatedTime: 5,
+  },
+  {
+    type: 'text',
+    title: '🔁 Recapitulando para Fixar',
+    content: 'Nesta aula, você explorou o conceito de interpretação textual, aprendeu técnicas valiosas para desvendar os segredos de um texto e viu um exemplo prático. \n\n✅ Lembre-se: a interpretação é uma habilidade que se aprimora com a prática constante. Continue exercitando!',
+    estimatedTime: 3,
+  }
+];
 
   const [lessonParts] = useState<LessonPart[]>(initialLessonParts);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
@@ -119,7 +125,7 @@ const LessonScreen: React.FC = () => {
   };
 
   const handleCompleteLesson = (): void => {
-    const earnedXp: number = 100; // Increased XP for a more substantial lesson
+    const earnedXp: number = 100; 
     setXpGained(earnedXp);
     setLessonCompleted(true);
     Alert.alert(
@@ -147,7 +153,7 @@ const LessonScreen: React.FC = () => {
             style={[styles.button, styles.primaryButton, styles.continueButton]}
           >
             <Text style={styles.buttonText}>Continuar Aprendendo</Text>
-            
+
           </TouchableOpacity>
         </SafeAreaView>
       </GestureHandlerRootView>
@@ -165,7 +171,7 @@ const LessonScreen: React.FC = () => {
             <Image style={styles.backIcon} source={require('@/assets/images/Back.png')} />
           </Pressable>
           <Text style={styles.headerTitle}>{LESSON_TITLE}</Text>
-          <View style={{width: 24}} /> 
+          <View style={{ width: 24 }} />
         </View>
 
         <View style={styles.progressBarContainer}>
@@ -179,7 +185,7 @@ const LessonScreen: React.FC = () => {
                 <Text style={styles.partTitleText}>{currentPart.title}</Text>
               )}
               {currentPart.estimatedTime && (
-                  <Text style={styles.estimatedTimeText}>Tempo estimado: {currentPart.estimatedTime} min</Text>
+                <Text style={styles.estimatedTimeText}>Tempo estimado: {currentPart.estimatedTime} min</Text>
               )}
 
               {currentPart.type === 'text' && (
@@ -190,24 +196,24 @@ const LessonScreen: React.FC = () => {
                   <Video
                     ref={videoRef}
                     style={styles.videoPlayer}
-                    source={currentPart.content} 
+                    source={currentPart.content}
                     useNativeControls
                     resizeMode={ResizeMode.CONTAIN}
                     onPlaybackStatusUpdate={newStatus => setStatus(() => newStatus)}
                     onError={(error) => Alert.alert("Erro no Vídeo", `Não foi possível carregar o vídeo. ${error}`)}
                   />
                   <View style={styles.videoControls}>
-                     <TouchableOpacity 
-                        style={styles.controlButton} 
-                        onPress={() => status?.isLoaded && status.isPlaying ? videoRef.current?.pauseAsync() : videoRef.current?.playAsync()}
-                        disabled={!status?.isLoaded}
-                      >
-                        <Text style={styles.controlButtonText}>{status?.isLoaded && status.isPlaying ? 'Pausar' : 'Reproduzir'}</Text>
-                      </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.controlButton}
+                      onPress={() => status?.isLoaded && status.isPlaying ? videoRef.current?.pauseAsync() : videoRef.current?.playAsync()}
+                      disabled={!status?.isLoaded}
+                    >
+                      <Text style={styles.controlButtonText}>{status?.isLoaded && status.isPlaying ? 'Pausar' : 'Reproduzir'}</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               )}
-               {!currentPart.content && currentPart.type === 'video' && (
+              {!currentPart.content && currentPart.type === 'video' && (
                 <Text style={styles.errorText}>Vídeo não encontrado. Verifique o caminho do arquivo.</Text>
               )}
             </View>
@@ -275,7 +281,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600', // Semibold
     color: TEXT_COLOR_PRIMARY,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-SemiBold',
   } as TextStyle,
   progressBarContainer: {
     height: 8,
@@ -284,7 +290,7 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   progressBarFill: {
     height: '100%',
-    backgroundColor: PRIMARY_COLOR, 
+    backgroundColor: PRIMARY_COLOR,
     borderRadius: 4,
   } as ViewStyle,
   contentScrollArea: {
@@ -307,10 +313,10 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   partTitleText: {
     fontSize: 20, // Slightly larger
-    fontWeight: '600', // Poppins Bold
+    fontWeight: 600, 
     color: PRIMARY_COLOR,
     marginBottom: 12,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-SemiBold',
   } as TextStyle,
   estimatedTimeText: {
     fontSize: 12,
@@ -327,14 +333,16 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
   } as TextStyle,
   videoContainer: {
+    flex:1,
     marginBottom: 20,
     borderRadius: 10,
     overflow: 'hidden', // Ensures children (video) also have rounded corners
     backgroundColor: '#000',
   } as ViewStyle,
   videoPlayer: {
+    flex:1,
     width: '100%',
-    aspectRatio: 30/50, // Common video aspect ratio
+    aspectRatio: 9 / 16, // Common video aspect ratio
   } as ViewStyle,
   videoControls: {
     flexDirection: 'row',
@@ -342,7 +350,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent controls background
   } as ViewStyle,
-   controlButton: {
+  controlButton: {
     backgroundColor: PRIMARY_COLOR,
     paddingHorizontal: 15,
     paddingVertical: 8,
@@ -351,7 +359,7 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   controlButtonText: {
     color: '#FFFFFF',
-    fontFamily: 'Poppins-Medium',
+    fontFamily: 'Poppins-Regular',
     fontSize: 14,
   } as TextStyle,
   errorText: {
@@ -375,10 +383,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     paddingVertical: 12,
     paddingHorizontal: 25,
-    borderRadius: 25, // More rounded
+    borderRadius: 25, 
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: SCREEN_WIDTH * 0.4, // Ensure buttons have a decent width
+    minWidth: SCREEN_WIDTH * 0.4, 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -391,42 +399,42 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   secondaryButton: {
     fontFamily: 'Poppins-Regular',
-    backgroundColor: '#757575', // A neutral gray for secondary actions
+    backgroundColor: '#757575', 
   } as ViewStyle,
   buttonText: {
     fontSize: 16,
     color: '#FFFFFF',
-    fontWeight: '600', // Semibold
+    fontWeight: '600', 
     fontFamily: 'Poppins-SemiBold',
   } as TextStyle,
   disabledButton: {
-    backgroundColor: '#BDBDBD', // Lighter gray for disabled state
+    backgroundColor: '#BDBDBD', 
     elevation: 0,
     shadowOpacity: 0,
   } as ViewStyle,
 
   completionTitle: {
     fontSize: 26,
-    fontWeight: 'bold', // Poppins Bold
+    fontWeight: 'bold', 
     color: PRIMARY_COLOR,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     textAlign: 'center',
     marginBottom: 10,
   } as TextStyle,
   completionText: {
     fontSize: 18,
     color: TEXT_COLOR_PRIMARY,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-SemiBold',
     textAlign: 'center',
     marginBottom: 30,
   } as TextStyle,
   continueButton: {
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-SemiBold',
     marginTop: 20,
-    paddingVertical: 15, // Slightly larger for primary action
+    paddingVertical: 15, 
   } as ViewStyle,
- 
-  
+
+
 });
 
 export default LessonScreen;

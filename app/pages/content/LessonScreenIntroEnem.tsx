@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -39,6 +40,7 @@ import { useEffect } from 'react';
 
 // Component
 const LessonScreen: React.FC = () => {
+  const navigation = useNavigation();
   const [fontsLoaded] = useFonts({
     Poppins_Regular: require("@/assets/fonts/poppins/Poppins-Regular.ttf"),
     Poppins_Bold: require("@/assets/fonts/poppins/Poppins-Bold.ttf"),
@@ -147,8 +149,7 @@ const LessonScreen: React.FC = () => {
               setLessonCompleted(false);
               setCurrentStepIndex(0);
               setXpGained(0);
-              // Placeholder for navigation, e.g., back to course list
-              Alert.alert("Navegação", "Retornando à lista de aulas (simulado).");
+              navigation.navigate('Progress');
             }}
             style={[styles.button, styles.primaryButton, styles.continueButton]}
           >
@@ -167,7 +168,7 @@ const LessonScreen: React.FC = () => {
     <GestureHandlerRootView style={styles.gestureHandlerRoot}>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerBar}>
-          <Pressable onPress={() => Alert.alert("Navegação", "Voltar para a página do curso (simulado).")} style={styles.backButton}>
+          <Pressable onPress={() => navigation.navigate('planoDeEstudos')} style={styles.backButton}>
             <Image style={styles.backIcon} source={require('@/assets/images/Back.png')} />
           </Pressable>
           <Text style={styles.headerTitle}>{LESSON_TITLE}</Text>

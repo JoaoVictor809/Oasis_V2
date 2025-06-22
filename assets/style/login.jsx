@@ -9,9 +9,7 @@ const [fontsLoaded] = useFonts({
         'Poppins_Regular': require('@/assets/fonts/poppins/Poppins-Regular.ttf'),
         'Poppins_Bold': require('@/assets/fonts/poppins/Poppins-Bold.ttf')
     });
-    // Oculta a tela de splash quando as fontes são carregadas
-   
-
+    
 export default StyleSheet.create({
     container: {
         flex: 1,
@@ -100,5 +98,26 @@ export default StyleSheet.create({
       color:"#fff" ,
       fontFamily:'Poppins_Regular',
       display:'flex'
+    },
+    boxInput:{
+        display:'flex',
+        flexDirection:'row',
+        alignItems:'center',
+        width:"100%",
+        borderRadius:20,
+        backgroundColor:"#585454af",
+        justifyContent:'space-between',
+        paddingRight:15
+    },
+    inputPassword:{
+        height: 45,
+        padding: 10,
+        width:"75%",
+        borderRadius:20,
+        color:'#fff',
+        fontFamily:'Poppins_Regular',
+        borderWidth: 0, 
+        outlineWidth: 0, 
+        fontWeight:'bold',
     }
 })

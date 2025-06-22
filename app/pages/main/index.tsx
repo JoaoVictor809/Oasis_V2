@@ -23,6 +23,8 @@ export default function Index() {
         'Poppins_Light': require('../../../assets/fonts/poppins/Poppins-Light.ttf')
     });
 
+    const router = useRouter(); // Moved line
+
     useEffect(() => {
         if (fontsLoaded) {
             SplashScreen.hideAsync();
@@ -95,7 +97,7 @@ export default function Index() {
         return null;
     }
 
-    const router = useRouter();
+    // const router = useRouter(); // Line removed from here
 
     const buttonsData = [
         { image: require("@/assets/images/logotipo-provas/enem.svg"), route: "/pages/main/pagesRoot/vestibularPageEnem" },

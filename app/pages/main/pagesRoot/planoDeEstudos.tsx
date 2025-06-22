@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import * as Font from "expo-font";
+import Icon from "react-native-vector-icons/FontAwesome"; 
+import * as Font from "expo-font"; 
 
 const loadFonts = () => {
   return Font.loadAsync({
@@ -13,69 +13,50 @@ const loadFonts = () => {
 const modulos = [
   {
     id: "1",
-    title: "Módulo 1 - Linguagens",
+    title: "Módulo 1 - HTML",
     data: [
-      { id: "1", title: "Interpretação de Textos" },
-      { id: "2", title: "Funções da Linguagem" },
-      { id: "3", title: "Figuras de Linguagem" },
-      { id: "4", title: "Gêneros Textuais" },
-      { id: "5", title: "Gramática e Ortografia" },
-      { id: "6", title: "Teste o seu conhecimento" },
+      { id: "1", title: "Introdução ao HTML" },
+      { id: "2", title: "Tags e Estrutura" },
+      { id: "3", title: "Atributos e Estilos" },
+      { id: "4", title: "Listas e Tabelas" },
+      { id: "5", title: "Formulários e Inputs" },
+      { id: "6", title: "Teste o seu conhecimentos" }, 
     ],
   },
   {
     id: "2",
-    title: "Módulo 2 - Matemática",
+    title: "Módulo 2 - HTML",
     data: [
-      { id: "7", title: "Razão e Proporção" },
-      { id: "8", title: "Porcentagem e Juros" },
-      { id: "9", title: "Equações do 1º e 2º grau" },
-      { id: "10", title: "Funções e Gráficos" },
-      { id: "11", title: "Teste o seu conhecimento" },
-    ],
-  },
-  {
-    id: "3",
-    title: "Módulo 3 - Ciências Humanas",
-    data: [
-      { id: "12", title: "História do Brasil" },
-      { id: "13", title: "Geografia e Meio Ambiente" },
-      { id: "14", title: "Filosofia e Ética" },
-      { id: "15", title: "Sociologia no ENEM" },
-      { id: "16", title: "Teste o seu conhecimento" },
-    ],
-  },
-  {
-    id: "4",
-    title: "Módulo 4 - Ciências da Natureza",
-    data: [
-      { id: "17", title: "Biologia: Ecologia" },
-      { id: "18", title: "Química: Ligações e Reações" },
-      { id: "19", title: "Física: Cinemática" },
-      { id: "20", title: "Física: Leis de Newton" },
-      { id: "21", title: "Teste o seu conhecimento" },
+      { id: "6", title: "Semântica e Acessibilidade" },
+      { id: "7", title: "Elementos de Mídia" },
+      { id: "8", title: "SEO e Performance" },
+      { id: "9", title: "HTML5 Avançado" },
+      { id: "10", title: "Teste o seu conhecimento" },
     ],
   },
 ];
 
 const ModuloList = ({ title, data }) => (
-  <View style={styles.moduleContainer}>
+  <View style={styles.moduleContainer}>  
     <Text style={styles.title}>{title}</Text>
     <FlatList
       data={data}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => {
-        const isTestButton = item.title.includes("Teste o seu conhecimento");
-
+        const isTestButton = item.title === "Teste o seu conhecimento" || item.title === "Teste o seu conhecimentos"; 
+        
         return (
           <View style={styles.card}>
             <TouchableOpacity
-              style={[styles.button, isTestButton && styles.testButton]}
+              style={[
+                styles.button,
+                isTestButton && styles.testButton, 
+              ]}
             >
               <Text
                 style={[
                   styles.buttonText,
-                  isTestButton && styles.testButtonText,
+                  isTestButton && styles.testButtonText, 
                 ]}
               >
                 {item.title}
@@ -92,7 +73,7 @@ const ModuloList = ({ title, data }) => (
   </View>
 );
 
-export default function ENEMCourseScreen() {
+export default function HTMLCourseScreen() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
@@ -119,7 +100,7 @@ export default function ENEMCourseScreen() {
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: { flex: 1, backgroundColor: "#f5f5f5" },
+  scrollContainer: { flex: 1, backgroundColor: "#f5f5f5" }, 
   container: { padding: 20 },
 
   loadingText: {
@@ -129,27 +110,27 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
   },
 
-  moduleContainer: {
-    backgroundColor: "white",
+  moduleContainer: { 
+    backgroundColor: "white", 
     padding: 25,
-    paddingVertical: 30,
-    borderRadius: 15,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    paddingVertical: 30, 
+    borderRadius: 15, 
+    marginBottom: 20, 
+    shadowColor: "#000", 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.1, 
+    shadowRadius: 4, 
     elevation: 5,
   },
 
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 10,
+  title: { 
+    fontSize: 22, 
+    fontWeight: "bold", 
+    marginBottom: 10, 
     color: "#1261D7",
-    fontFamily: "Poppins-Bold",
+    fontFamily: "Poppins-Bold", 
   },
-
+  
   card: { backgroundColor: "white", borderRadius: 10, marginVertical: 5 },
 
   button: {
@@ -159,26 +140,27 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 15,
     borderRadius: 30,
-    backgroundColor: "#1261D7",
-    marginTop: 20,
+    backgroundColor:"#1261D7",
+    marginTop:20,
   },
 
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
+  buttonText: { 
+    fontSize: 16, 
+    fontWeight: "bold", 
     color: "#fff",
     fontFamily: "Poppins-Bold",
-  },
+  }, 
 
   icon: { marginLeft: 10, color: "#FFF" },
 
+  // Custom styles for the "Teste o seu conhecimento" button
   testButton: {
-    backgroundColor: "#FFF",
-    borderWidth: 2,
-    borderColor: "#1261D7",
+    backgroundColor: "#FFF", // White background
+    borderWidth: 2, // Blue border width
+    borderColor: "#1261D7", // Blue border color
   },
 
   testButtonText: {
-    color: "#1261D7",
+    color: "#1261D7", // Blue text color
   },
 });

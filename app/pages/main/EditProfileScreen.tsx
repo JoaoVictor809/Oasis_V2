@@ -249,4 +249,3 @@ const EditProfileScreen = () => {
 
 
 export default EditProfileScreen;
-\

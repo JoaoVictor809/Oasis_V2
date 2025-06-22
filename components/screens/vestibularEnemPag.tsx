@@ -1,12 +1,13 @@
-import { View, Text, Image, ScrollView, Button,StyleSheet } from "react-native";
+import { View, Text, Image, ScrollView, Button, StyleSheet } from "react-native";
 import React, { useEffect, useRef, useCallback, useMemo, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
+import { useScroll } from "../../contexts/ScrollContext"; // Import useScroll
 import StyleOfVestibular from "@/assets/style/vestibularPages";
 import { Link } from "expo-router";
 import { GestureHandlerRootView, Pressable } from "react-native-gesture-handler";
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import CustomBackground from '@/components/CustomBackground'; 
+import CustomBackground from '@/components/CustomBackground';
 import MenuDrop001 from '../menuDrop/menuDrop001'
 import MenuDrop002 from '../menuDrop/menuDrop002'
 import MenuDrop003 from '../menuDrop/menuDrop003'
@@ -17,20 +18,49 @@ import { Stack, useRouter } from "expo-router";
 SplashScreen.preventAutoHideAsync();
 
 export default function VestibularScreen() {
+    const { setTabBarVisible, isTabBarVisible } = useScroll();
+    const [lastScrollY, setLastScrollY] = useState(0);
+
     const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['30%', '50%', '80%'], []);
+    const snapPoints = useMemo(() => ['30%', '50%', '80%'], []);
 
-  const hqandleOpenPress = () => bottomSheetRef.current?.expand();
-  const hqandleClosePress = () => bottomSheetRef.current?.close();
+    const hqandleOpenPress = () => bottomSheetRef.current?.expand();
+    const hqandleClosePress = () => bottomSheetRef.current?.close();
 
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
+    const handleSheetChanges = useCallback((index: number) => {
+        console.log('handleSheetChanges', index);
+    }, []);
 
     const [fontsLoaded] = useFonts({
         'Poppins_Regular': require('../../assets/fonts/poppins/Poppins-Regular.ttf'),
         'Poppins_Bold': require('../../assets/fonts/poppins/Poppins-Bold.ttf'),
     });
+
+    const handleScroll = (event: any) => {
+        const currentScrollY = event.nativeEvent.contentOffset.y;
+        const SCROLL_THRESHOLD = 10; // Min scroll distance to trigger change
+        const HIDE_THRESHOLD = 50; // Scroll down this much to hide
+
+        if (currentScrollY <= 0) { // At the top
+            if (!isTabBarVisible) setTabBarVisible(true);
+            setLastScrollY(0);
+            return;
+        }
+
+        // Scrolling Down
+        if (currentScrollY > lastScrollY && Math.abs(currentScrollY - lastScrollY) > SCROLL_THRESHOLD) {
+            if (isTabBarVisible && currentScrollY > HIDE_THRESHOLD) { // Only hide if scrolled past a certain point
+                setTabBarVisible(false);
+            }
+        }
+        // Scrolling Up
+        else if (currentScrollY < lastScrollY && Math.abs(currentScrollY - lastScrollY) > SCROLL_THRESHOLD) {
+            if (!isTabBarVisible) {
+                setTabBarVisible(true);
+            }
+        }
+        setLastScrollY(Math.max(0, currentScrollY));
+    };
 
     const [selected001, setSelected001] = useState<string>('');
     const [selected002, setSelected002] = useState<string>('');
@@ -49,25 +79,27 @@ export default function VestibularScreen() {
 
 
     return (
-        
+
         <GestureHandlerRootView style={StyleOfVestibular.background}>
             <View style={StyleOfVestibular.header}>
                 <Pressable>
                     <Link href={'../'}>
-                    <Image style={{width:30, height:30}} source={require('@/assets/images/Back.png')}/>
+                        <Image style={{ width: 30, height: 30 }} source={require('@/assets/images/Back.png')} />
                     </Link>
                 </Pressable>
                 <View style={StyleOfVestibular.headerTitle}>
-                    <Text style={{fontFamily:'Poppins_Bold', color:'#fff', fontSize:20}}>Enem</Text>
-                    <Text style={{fontFamily:'Poppins_Regular', color:'#fff', fontSize:15}}>-Exame Nacional do Ensino Médio</Text>
+                    <Text style={{ fontFamily: 'Poppins_Bold', color: '#fff', fontSize: 20 }}>Enem</Text>
+                    <Text style={{ fontFamily: 'Poppins_Regular', color: '#fff', fontSize: 15 }}>-Exame Nacional do Ensino Médio</Text>
                 </View>
             </View>
-            <ScrollView 
-                style={StyleOfVestibular.background} 
+            <ScrollView
+                style={StyleOfVestibular.background}
                 contentContainerStyle={{ paddingBottom: 20 }}
                 showsVerticalScrollIndicator={true}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
             >
-                
+
                 <View style={StyleOfVestibular.container}>
                     <Image
                         source={require("@/assets/images/logotipo-provas/image3.png")}
@@ -81,8 +113,8 @@ export default function VestibularScreen() {
                     <Text style={StyleOfVestibular.mainTitle}>Vestibular do Enem</Text>
 
                     <Text style={StyleOfVestibular.paragraph}>
-                        E aí, futuro(a) universitário(a)? O Enem é o caminho para a faculdade dos sonhos, 
-                        mas a preparação pode ser um desafio. Com o Oasis, você vai ter a força que precisa! 
+                        E aí, futuro(a) universitário(a)? O Enem é o caminho para a faculdade dos sonhos,
+                        mas a preparação pode ser um desafio. Com o Oasis, você vai ter a força que precisa!
                         Criado para te ajudar a superar as dificuldades, nosso app é a sua chave para o sucesso.
                     </Text>
 
@@ -103,14 +135,14 @@ export default function VestibularScreen() {
                     </Text>
 
                     <Text style={StyleOfVestibular.secondaryText}>Gere agora e comece a sua jornada!</Text>
-                    <Pressable 
-                        style={{ 
-                            backgroundColor: '#1261D7', 
-                            paddingVertical: 10, 
-                            paddingHorizontal: 50, 
-                            borderRadius: 20, 
-                            alignItems: 'center', 
-                            marginTop: 30 
+                    <Pressable
+                        style={{
+                            backgroundColor: '#1261D7',
+                            paddingVertical: 10,
+                            paddingHorizontal: 50,
+                            borderRadius: 20,
+                            alignItems: 'center',
+                            marginTop: 30
                         }}
                         onPress={hqandleOpenPress}
                     >
@@ -119,78 +151,77 @@ export default function VestibularScreen() {
                         </Text>
                     </Pressable>
                     <BottomSheet
-        ref={bottomSheetRef}
-        index={-1}
-        onChange={handleSheetChanges}
-        snapPoints={snapPoints}
-        enablePanDownToClose={true}
-        backgroundComponent={(props) => <CustomBackground {...props} />}
-        style={styles.bottomSheet} 
-      >
-        <BottomSheetView style={styles.contentContainer}>
-          <View style={styles.containerTitle}>
-            <Text style={styles.title}>Informações</Text>
-            <Pressable onPress={hqandleClosePress} >
-                <Image source={require('@/assets/images/icons/close.png')}/>
-            </Pressable>
-          </View>
-          <View style={styles.containerOption}>
-          <MenuDrop001 selected={selected001} setSelected={setSelected001} />
-          <MenuDrop002 selected={selected002} setSelected={setSelected002} />
-          <MenuDrop003 selected={selected003} setSelected={setSelected003} />
-          </View>
-          <Pressable onPress={() => router.push('../../telaloading')}>
-            <View style={styles.buttonGo}>
-               <Image source={require('@/assets/images/go.png')}/>
-          </View>
-          </Pressable>
-          
-          
-        </BottomSheetView>
-      </BottomSheet>
+                        ref={bottomSheetRef}
+                        index={-1}
+                        onChange={handleSheetChanges}
+                        snapPoints={snapPoints}
+                        enablePanDownToClose={true}
+                        backgroundComponent={(props) => <CustomBackground {...props} />}
+                        style={styles.bottomSheet}
+                    >
+                        <BottomSheetView style={styles.contentContainer}>
+                            <View style={styles.containerTitle}>
+                                <Text style={styles.title}>Informações</Text>
+                                <Pressable onPress={hqandleClosePress} >
+                                    <Image source={require('@/assets/images/icons/close.png')} />
+                                </Pressable>
+                            </View>
+                            <View style={styles.containerOption}>
+                                <MenuDrop001 selected={selected001} setSelected={setSelected001} />
+                                <MenuDrop002 selected={selected002} setSelected={setSelected002} />
+                                <MenuDrop003 selected={selected003} setSelected={setSelected003} />
+                            </View>
+                            <Pressable onPress={() => router.push('../../telaloading')}>
+                                <View style={styles.buttonGo}>
+                                    <Image source={require('@/assets/images/go.png')} />
+                                </View>
+                            </Pressable>
+
+
+                        </BottomSheetView>
+                    </BottomSheet>
                 </View>
             </ScrollView>
         </GestureHandlerRootView>
-        
-        
+
+
     );
 }
 
 const styles = StyleSheet.create({
-   
     contentContainer: {
-      flex: 1,
-      padding: 36,
-      alignItems: 'center',
-      gap:25
+        flex: 1,
+        padding: 36,
+        alignItems: 'center',
+        gap: 25
     },
     title: {
-      fontSize: 30,
-      fontFamily: 'Poppins_Bold',
-      color:'#fff'
+        fontSize: 30,
+        fontFamily: 'Poppins_Bold',
+        color: '#fff'
     },
     bottomSheet: {
-      borderTopLeftRadius: 40, 
-      borderTopRightRadius: 40, 
-      overflow: 'hidden', 
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
+        overflow: 'hidden',
     },
-    containerTitle:{
-      display:'flex',
-      flexDirection:'row',
-      justifyContent:'space-around',
-      alignItems:'center',
-      width:'100%'
+    containerTitle: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        width: '100%'
     },
-    containerOption:{
-      width:'100%',
-      gap:18
+    containerOption: {
+        width: '100%',
+        gap: 18
     },
-    buttonGo:{
-      backgroundColor:'#1261D7',
-      padding:13,
-      width:160,
-      borderRadius:20,
-      alignItems:'center',
-      cursor:'pointer'
+    buttonGo: {
+        backgroundColor: '#1261D7',
+        padding: 13,
+        width: 160,
+        borderRadius: 20,
+        alignItems: 'center',
+        cursor: 'pointer'
     }
-  });
+});

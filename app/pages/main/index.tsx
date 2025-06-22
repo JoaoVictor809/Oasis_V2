@@ -1,5 +1,6 @@
-import { View, Text, Pressable, Image, ScrollView, ActivityIndicator, ImageBackground } from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, Pressable, Image, ScrollView, ActivityIndicator, ImageBackground, Animated, Easing } from "react-native";
+
+import React, { useEffect, useState, useRef } from "react";
 import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
@@ -10,11 +11,19 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 SplashScreen.preventAutoHideAsync();
 
 export default function Index() {
+    // Animated text state
+    const animatedTexts = ["Vestibulares?", "Concursos?", "Cursos?"];
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const translateY = useRef(new Animated.Value(0)).current;
+    const opacityAnim = useRef(new Animated.Value(1)).current; // Added for fade effect
+
     const [fontsLoaded] = useFonts({
         'Poppins_Regular': require('../../../assets/fonts/poppins/Poppins-Regular.ttf'),
         'Poppins_Bold': require('../../../assets/fonts/poppins/Poppins-Bold.ttf'),
         'Poppins_Light': require('../../../assets/fonts/poppins/Poppins-Light.ttf')
     });
+
+    const router = useRouter(); // Moved line
 
     useEffect(() => {
         if (fontsLoaded) {
@@ -22,11 +31,73 @@ export default function Index() {
         }
     }, [fontsLoaded]);
 
+    useEffect(() => {
+        const animateText = () => {
+            // Reset opacity to 1 for the current text before animating out (if it was faded out)
+            // This is important if the animation was interrupted or for the very first run.
+            opacityAnim.setValue(1);
+
+            Animated.sequence([
+                // Fade out and move up
+                Animated.parallel([
+                    Animated.timing(translateY, {
+                        toValue: -20,
+                        duration: 300,
+                        easing: Easing.inOut(Easing.ease),
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(opacityAnim, {
+                        toValue: 0,
+                        duration: 300,
+                        easing: Easing.inOut(Easing.ease),
+                        useNativeDriver: true,
+                    }),
+                ]),
+                Animated.delay(100), // Short pause
+                // Prepare for next text: move to bottom, set opacity to 0, then update index
+                Animated.timing(translateY, { // This timing is just to use its complete callback
+                    toValue: 20,
+                    duration: 0, // Instant
+                    useNativeDriver: true,
+                }),
+            ]).start(() => {
+                // setCurrentIndex will trigger re-render, new text will be at translateY: 20, opacity: 0
+                setCurrentIndex((prevIndex) => {
+                    const nextIndex = (prevIndex + 1) % animatedTexts.length;
+                    // Reset for the new text that's about to animate in
+                    translateY.setValue(20); // Start from bottom
+                    opacityAnim.setValue(0);   // Start transparent
+
+                    // Animate new text in (fade in and move to center)
+                    Animated.parallel([
+                        Animated.timing(translateY, {
+                            toValue: 0,
+                            duration: 300,
+                            easing: Easing.inOut(Easing.ease),
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(opacityAnim, {
+                            toValue: 1,
+                            duration: 300,
+                            easing: Easing.inOut(Easing.ease),
+                            useNativeDriver: true,
+                        }),
+                    ]).start();
+                    return nextIndex;
+                });
+            });
+        };
+
+        const intervalId = setInterval(animateText, 2000); // Interval for full cycle
+
+        return () => clearInterval(intervalId);
+    }, []); // Empty array: effect runs once on mount, cleans up on unmount.
+
     if (!fontsLoaded) {
         return null;
     }
 
-    const router = useRouter();
+    // const router = useRouter(); // Line removed from here
 
     const buttonsData = [
         { image: require("@/assets/images/logotipo-provas/enem.svg"), route: "/pages/main/pagesRoot/vestibularPageEnem" },
@@ -35,7 +106,7 @@ export default function Index() {
     ];
 
     const buttonDataConcursos = [
-        { image: require("@/assets/images/logotipo-provas/correios.svg"), route: "/pages/main/pagesRoot/correiosPage" },
+        { image: require("@/assets/images/logotipo-provas/correios.svg"), route: "/pages/main/provas" },
         { image: require("@/assets/images/logotipo-provas/bancodobrasil.svg"), route: "/pages/main/provas" },
         { image: require("@/assets/images/logotipo-provas/caixaeconomica.svg"), route: "/pages/main/provas" },
         { image: require("@/assets/images/logotipo-provas/policiamilitar.svg"), route: "/pages/main/provas" },
@@ -74,7 +145,9 @@ export default function Index() {
                 <View>
                     <Text style={StyleOfIndex.styletitle}>Deseja</Text>
                     <Text style={StyleOfIndex.styletitle}>estudar para</Text>
-                    <Text style={StyleOfIndex.styletitle}>Vestibulares?</Text>
+                    <Animated.View style={[StyleOfIndex.animatedTextContainer, { opacity: opacityAnim, transform: [{ translateY }] }]}>
+                        <Text style={StyleOfIndex.styletitle}>{animatedTexts[currentIndex]}</Text>
+                    </Animated.View>
                 </View>
 
             </View>

@@ -1,6 +1,8 @@
-import { View, Platform, StyleSheet } from 'react-native';
+import { View, Platform, StyleSheet, Animated } from 'react-native';
+import React, { useRef, useEffect } from 'react'; // Added useRef, useEffect
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
 import { Text, PlatformPressable } from '@react-navigation/elements';
+import { useScroll } from '../contexts/ScrollContext'; // Import useScroll
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -9,6 +11,17 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { router } from 'expo-router';
 
 export default function TabBar({ state, descriptors, navigation }) {
+    const { isTabBarVisible } = useScroll();
+    const translateYValue = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.timing(translateYValue, {
+            toValue: isTabBarVisible ? 0 : 100, // 100 to hide (move down)
+            duration: 300,
+            useNativeDriver: true,
+        }).start();
+    }, [isTabBarVisible]);
+
     const greyColor = '#737373';
     const activeColor = '#1261D7';
 
@@ -24,7 +37,7 @@ export default function TabBar({ state, descriptors, navigation }) {
     const { colors } = useTheme();
 
     return (
-        <View style={styles.tabbar}>
+        <Animated.View style={[styles.tabbar, { transform: [{ translateY: translateYValue }] }]}>
             {state.routes.map((route, index) => {
                 const { options } = descriptors[route.key];
                 const label =
@@ -84,7 +97,7 @@ export default function TabBar({ state, descriptors, navigation }) {
                     </PlatformPressable>
                 );
             })}
-        </View>
+        </Animated.View>
     );
 }
 
